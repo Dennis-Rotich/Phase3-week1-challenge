@@ -1,78 +1,32 @@
-# def solution(A):
-#     # Create a dictionary to store the sums of digits for each number in A
-#     sums_of_digits = {}
-#     # Create a set to store the numbers whose digits add up to an equal sum
-#     equal_sum_numbers = set()
-
-#     # Iterate over each number in A
-#     for num in A:
-#         # Calculate the sum of digits for the current number
-#         sum_of_digits = sum(int(digit) for digit in str(num))
-#         print(sum_of_digits)
-#         sums_of_digits[sum_of_digits] = [num]
-
-
-#     print(f'dict:{sums_of_digits}')
-#     print(f'set:{equal_sum_numbers}')
-#     # If there are no numbers with digits that add up to an equal sum, return -1
-#     if not equal_sum_numbers:
-#         return -1
-
-#     # Initialize the maximum sum as -1
-#     max_sum = -1
-
-#     # Iterate over each pair of numbers in the equal_sum_numbers set
-#     for num1 in equal_sum_numbers:
-#         for num2 in equal_sum_numbers:
-#             # If the numbers are the same, skip them
-#             if num1 == num2:
-#                 continue
-#             # Calculate the sum of the two numbers
-#             current_sum = num1 + num2
-#             # If the current sum is greater than the maximum sum, update the maximum sum
-#             if current_sum > max_sum:
-#                 max_sum = current_sum
-
-#     # Return the maximum sum
-#     return max_sum 
-
 def solution(A):
     # Create a dictionary to store the sums of digits for each number in A
     sums_of_digits = {}
-    # Create a set to store the numbers whose digits add up to an equal sum
-    equal_sum_numbers = set()
-
+    # Create another dictionary to store the sums of digits of the corresponding pair
+    sums_of_digits2 = {}
+    #Create a list to store sums of the pairs with digits of equal sum
+    completed_sums = []
     # Iterate over each number in A
     for num in A:
-        # Calculate the sum of digits for the current number
+       #Calculate sum of digits in each number
         sum_of_digits = sum(int(digit) for digit in str(num))
-        sums_of_digits[sum_of_digits] = [num]
-        
-        if sum_of_digits in equal_sum_numbers:
-            equal_sum_numbers.add(num)
+       #Check if the sum of diigits is present in sums_of_digits dictionary
+        if sum_of_digits in sums_of_digits:
+            sums_of_digits2[sum_of_digits] = num
+        #Add the corresponding pair to sums_of_digits2 dictionary
         else:
-            equal_sum_numbers.add(sum_of_digits)
-
-    # If there are no numbers with digits that add up to an equal sum, return -1
-    if len(equal_sum_numbers) < 2:
+            sums_of_digits[sum_of_digits] = num
+    #Iterate over keys in sums_of_digits and sums_of_digits2
+    for num in sums_of_digits:
+        for num2 in sums_of_digits2:
+            #If the keys are similar - meaning they have the same sum of digits, add the two numbers and store the sum in completed_sums
+            if num == num2:
+                result = sums_of_digits[num] + sums_of_digits2[num2]
+                completed_sums.append(result)
+    #Check if completed_sums is empty meaning their is no pair of numbers with similar sum of digits
+    if completed_sums == []:
         return -1
+    else:
+        return max(completed_sums)
 
-    # Initialize the maximum sum as -1
-    max_sum = -1
 
-    # Iterate over each pair of numbers in the equal_sum_numbers set
-    for num1 in equal_sum_numbers:
-        for num2 in equal_sum_numbers:
-            # If the numbers are the same, skip them
-            if num1 == num2:
-                continue
-            # Calculate the sum of the two numbers
-            current_sum = num1 + num2
-            # If the current sum is greater than the maximum sum, update the maximum sum
-            if current_sum > max_sum:
-                max_sum = current_sum
 
-    # Return the maximum sum
-    return max_sum 
-
-print(solution([51, 71, 17, 42]))
